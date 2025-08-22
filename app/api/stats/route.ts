@@ -11,8 +11,9 @@ export async function GET() {
         k(v, "t1", "label", "Fitted"), k(v, "t1", "label", "Lufs"),
         k(v, "t2", "label", "Fitted"), k(v, "t2", "label", "Lufs"),
     ];
-    const vals = await kv.mget<number[]>(...keys);
-    const toNum = (x: any) => typeof x === "number" ? x : 0;
+    // keep keys as-is
+    const vals = (await kv.mget(...keys)) as Array<number | null>;
+    const toNum = (x: number | null | undefined) => (typeof x === "number" ? x : 0);
 
     const data = {
         t1: { one: toNum(vals[0]), two: toNum(vals[1]), tie: toNum(vals[2]) },
